@@ -1,20 +1,33 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Feed Builder & Feedbuilde Orchestrator
 
-# Run and deploy your AI Studio app
+**Feed Builder** is a satisfying and addictive idle/strategy building game where you design, optimize, and grow the ultimate social media feed. Build your empire on Base Mainnet!
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/0333a27d-7ece-44b0-a750-ac456910d60a
+- **Feed Studio**: Drag and drop content modules into your algorithm line.
+- **Content Vault**: Curate content including Memes, Polls, Videos, Ads, News, and Threads. Manage the balance between Engagement, Monetization, and Toxicity.
+- **Algorithm Lab**: Invest your revenue back into your systems to boost retention, increase base synergy, add server capacity and improve AI Moderation.
+- **On-Chain Progression**: Say GM and record your Empire's state on Base Mainnet.
+
+## Feedbuilde Orchestrator Agent (ERC-8004)
+
+Feed Builder is powered by the **Feedbuilde Orchestrator**, an ERC-8004 compliant trustless AI agent.
+
+- **Wallet**: `0xe157F1F5e12adB38Ba013683E9Ce24efe21e5bA6`
+- **Capabilities**: feed-building, content-curation, intelligent-aggregation, multi-source-orchestration, real-time-curation, personalized-feeds, mcp-command-execution
+- **Chain**: Base (EIP-155:8453)
+
+### APIs & Endpoints
+
+- **Agent Card**: `/.well-known/agent-card.json`
+- **Agent API**: `/api/agent` (Provides core agent orchestration metadata)
+- **MCP API**: `/api/mcp` (Execution endpoint for active commands)
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
+```bash
+npm install
+npm run dev
+```
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+The game and agent endpoints will run at `http://localhost:3000`.
