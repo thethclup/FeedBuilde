@@ -13,8 +13,7 @@
 
 Feed Builder is powered by the **Feedbuilde Orchestrator**, an ERC-8004 compliant trustless AI agent.
 
-- **Wallet**: `0xe157F1F5e12adB38Ba013683E9Ce24efe21e5bA6`
-- **Capabilities**: feed-building, content-curation, intelligent-aggregation, multi-source-orchestration, real-time-curation, personalized-feeds, mcp-command-execution
+- **Capabilities**: feed-building, content-curation, intelligent-aggregation, multi-source-orchestration, real-time-curation, personalized-feeds
 - **Chain**: Base (EIP-155:8453)
 
 ### APIs & Endpoints

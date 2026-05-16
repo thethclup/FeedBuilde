@@ -4,39 +4,58 @@
   "version": "1.0.0",
   "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
   "image": "https://feedbuilde.vercel.app/logo.png",
-  "wallets": {
-    "base": "0xe157F1F5e12adB38Ba013683E9Ce24efe21e5bA6"
-  },
+  "owner": "0xe157F1F5e12adB38Ba013683E9Ce24efe21e5bA6",
+  "agentWallet": "0xe157F1F5e12adB38Ba013683E9Ce24efe21e5bA6",
+  "active": true,
+  "skills": [
+    {
+      "id": "feed-building",
+      "name": "Feed Building",
+      "description": "Real-time feed building mechanics, algorithmic engagement optimization and timeline management."
+    },
+    {
+      "id": "multi-source-orchestration",
+      "name": "Multi-Source Orchestration",
+      "description": "Manage and synchronize multiple content sources and engagement pipelines simultaneously."
+    },
+    {
+      "id": "performance-optimization",
+      "name": "Performance Optimization",
+      "description": "Analyze and optimize toxicity mitigation, retention timing and virality strategy in real-time."
+    }
+  ],
   "services": [
     {
       "name": "A2A",
-      "endpoint": "https://feedbuilde.vercel.app/.well-known/agent-card.json",
       "version": "1.0.0",
-      "description": "Agent-to-Agent communication"
+      "endpoint": "https://feedbuilde.vercel.app/.well-known/agent-card.json"
     },
     {
       "name": "MCP",
-      "endpoint": "https://feedbuilde.vercel.app/api/mcp",
       "version": "1.0.0",
-      "description": "Model Context Protocol - Active command execution"
+      "endpoint": "https://feedbuilde.vercel.app/api/mcp"
     },
     {
       "name": "API",
-      "endpoint": "https://feedbuilde.vercel.app/api/agent",
       "version": "1.0.0",
-      "description": "Main agent control API"
+      "endpoint": "https://feedbuilde.vercel.app/api/agent"
     }
   ],
   "capabilities": [
     "feed-building",
     "content-curation",
-    "intelligent-aggregation",
-    "multi-source-orchestration",
-    "real-time-curation",
-    "personalized-feeds",
-    "mcp-command-execution"
+    "multi-track-management",
+    "speed-optimization",
+    "competitive-orchestration",
+    "ecosystem-coordination"
   ],
   "supportedChains": ["eip155:8453"],
-  "active": true,
-  "status": "online"
+  "x402Support": false,
+  "registrations": [
+    {
+      "agentId": null,
+      "agentRegistry": "eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432"
+    }
+  ],
+  "supportedTrust": ["reputation"]
 }
