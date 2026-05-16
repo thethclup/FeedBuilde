@@ -40,66 +40,34 @@ async function startServer() {
     res.json({
       protocol: "MCP",
       version: "1.0.0",
-      name: "Feedbuilde MCP Endpoint",
+      name: "Feedbuilde MCP Server",
       status: "active",
-      description: "Active MCP server for Feedbuilde Orchestrator Agent",
-      capabilities: ["feed-building", "content-curation", "intelligent-aggregation"],
-      timestamp: new Date().toISOString()
+      description: "Active MCP Endpoint for Feedbuilde Orchestrator",
+      timestamp: new Date().toISOString(),
+      tools: [
+        { "name": "get_status", "description": "Get current agent status" },
+        { "name": "fetch_feed", "description": "Fetch and process feeds" },
+        { "name": "analyze_content", "description": "Analyze feed content" }
+      ],
+      capabilities: [
+        "feed-management",
+        "content-curation",
+        "real-time-aggregation"
+      ]
     });
   });
 
   app.post("/api/mcp", (req, res) => {
     try {
-      const { action, command, params } = req.body;
-
-      let result: any = {};
-
-      switch (action || command) {
-        case "status":
-        case "ping":
-          result = { 
-            status: "online", 
-            agent: "Feedbuilde Orchestrator",
-            message: "Ready to build feeds" 
-          };
-          break;
-
-        case "execute":
-          result = {
-            success: true,
-            action: command || params,
-            executedAt: new Date().toISOString(),
-            message: "Feed command executed successfully"
-          };
-          break;
-
-        case "get_info":
-          result = {
-            name: "Feedbuilde Orchestrator",
-            wallet: "0xe157F1F5e12adB38Ba013683E9Ce24efe21e5bA6",
-            platform: "Base",
-            version: "1.0.0"
-          };
-          break;
-
-        default:
-          result = {
-            success: true,
-            message: "Command received",
-            data: req.body
-          };
-      }
-
       res.json({
         status: "success",
-        agent: "Feedbuilde Orchestrator",
-        response: result,
+        message: "Command received",
         receivedAt: new Date().toISOString()
       });
     } catch (error) {
       res.status(400).json({
         status: "error",
-        message: "Failed to process MCP command"
+        message: "Invalid request"
       });
     }
   });
