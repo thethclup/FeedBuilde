@@ -1,32 +1,67 @@
 # Feed Builder & Feedbuilde Orchestrator
 
-**Feed Builder** is a satisfying and addictive idle/strategy building game where you design, optimize, and grow the ultimate social media feed. Build your empire on Base Mainnet!
+## Overview
 
-## Features
+**Feedbuilde Orchestrator** is an ERC-8004 compliant trustless AI agent that manages and synchronizes multiple content sources and engagement pipelines. Built as a high-performance system for the Base network, it curates feeds, coordinates ecosystems, and executes real-time automation. 
 
-- **Feed Studio**: Drag and drop content modules into your algorithm line.
-- **Content Vault**: Curate content including Memes, Polls, Videos, Ads, News, and Threads. Manage the balance between Engagement, Monetization, and Toxicity.
-- **Algorithm Lab**: Invest your revenue back into your systems to boost retention, increase base synergy, add server capacity and improve AI Moderation.
-- **On-Chain Progression**: Say GM and record your Empire's state on Base Mainnet.
+## Key Features
 
-## Feedbuilde Orchestrator Agent (ERC-8004)
+- **Feed Building**: Real-time feed building mechanics, algorithmic engagement optimization, and timeline management.
+- **Multi-Source Orchestration**: Manage and synchronize multiple content sources and engagement pipelines simultaneously.
+- **Performance Optimization**: Analyze and optimize toxicity mitigation, retention timing, and virality strategy in real-time.
 
-Feed Builder is powered by the **Feedbuilde Orchestrator**, an ERC-8004 compliant trustless AI agent.
+## Technology Stack
 
-- **Capabilities**: feed-building, content-curation, intelligent-aggregation, multi-source-orchestration, real-time-curation, personalized-feeds
-- **Chain**: Base (EIP-155:8453)
+- **Agent Protocol**: ERC-8004 Registration V1
+- **Supported Chains**: Base (EIP-155:8453)
+- **Trust Model**: Reputation-based
+- **MCP Integration**: Fully compliant Model Context Protocol implementation for external interactions
 
-### APIs & Endpoints
+## Agent Configuration & Endpoints
 
-- **Agent Card**: `/.well-known/agent-card.json`
-- **Agent API**: `/api/agent` (Provides core agent orchestration metadata)
-- **MCP API**: `/api/mcp` (Execution endpoint for active commands)
+This agent uses the ERC-8004 standard for agent discoverability and connection. Below are the primary interaction endpoints for A2A communication.
 
-## Run Locally
+- **A2A Endpoint (Agent Metadata):** `/.well-known/agent-card.json`
+- **Agent Orchestrator API:** `/api/agent`
+- **Model Context Protocol (MCP) API:** `/api/mcp`
 
-```bash
-npm install
-npm run dev
-```
+### Capabilities
 
-The game and agent endpoints will run at `http://localhost:3000`.
+The agent is capable of autonomous task execution in the following domains:
+- feed-building
+- content-curation
+- multi-track-management
+- speed-optimization
+- competitive-orchestration
+- ecosystem-coordination
+
+### Connecting via MCP
+
+The orchestrator includes an active MCP server allowing seamless, programmatic connections.
+
+1. Issue a `GET` request to `/api/mcp` to fetch the agent's current status and active tools payload.
+2. The agent provides the following default diagnostic and execution tools:
+   - `get_race_status`
+   - `start_race`
+   - `get_leaderboard`
+   - `optimize_speed`
+   - `get_track_info`
+
+## How to Run Locally
+
+You can spin up the full orchestration environment for testing locally using Node.js.
+
+1. Clone the repository and install dependencies:
+   ```bash
+   npm install
+   ```
+
+2. Start the local development server:
+   ```bash
+   npm run dev
+   ```
+
+3. Access the APIs locally at:
+   - Metadata: `http://localhost:3000/.well-known/agent-card.json`
+   - MCP API: `http://localhost:3000/api/mcp`
+   - Agent API: `http://localhost:3000/api/agent`
