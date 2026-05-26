@@ -35,30 +35,102 @@ async function startServer() {
     });
   });
 
+  const mcpTools = [
+    { 
+      name: "get_race_status", 
+      description: "Get current race status",
+      inputSchema: { type: "object", properties: {} }
+    },
+    { 
+      name: "start_race", 
+      description: "Start a new race",
+      inputSchema: { type: "object", properties: {} }
+    },
+    { 
+      name: "get_leaderboard", 
+      description: "Get the current leaderboard",
+      inputSchema: { type: "object", properties: {} }
+    },
+    { 
+      name: "optimize_speed", 
+      description: "Optimize racing speed",
+      inputSchema: { type: "object", properties: {} }
+    },
+    { 
+      name: "get_track_info", 
+      description: "Get information about a specific track",
+      inputSchema: { type: "object", properties: {} }
+    }
+  ];
+
   // MCP API
   app.get("/api/mcp", (req, res) => {
     res.json({
       protocol: "MCP",
       version: "1.0.0",
-      name: "Feedbuilde MCP Server",
+      name: "Feedbuilde Orchestrator",
       status: "active",
-      description: "Active MCP Endpoint for Feedbuilde Orchestrator",
+      description: "Feedbuilde platformunda çalışan ERC-8004 uyumlu AI Agent.",
       timestamp: new Date().toISOString(),
-      tools: [
-        { "name": "get_status", "description": "Get current agent status" },
-        { "name": "fetch_feed", "description": "Fetch and process feeds" },
-        { "name": "analyze_content", "description": "Analyze feed content" }
-      ],
+      tools: mcpTools,
+      prompts: [],
+      resources: [],
       capabilities: [
-        "feed-management",
+        "feed-building",
         "content-curation",
-        "real-time-aggregation"
+        "multi-track-management",
+        "speed-optimization",
+        "competitive-orchestration",
+        "ecosystem-coordination"
       ]
     });
   });
 
   app.post("/api/mcp", (req, res) => {
     try {
+      const body = req.body;
+      if (body && (body.jsonrpc === "2.0" || body.method)) {
+        if (body.method === "initialize") {
+          return res.json({
+            jsonrpc: "2.0",
+            id: body.id,
+            result: {
+              protocolVersion: body.params?.protocolVersion || "2024-11-05",
+              capabilities: {
+                tools: {},
+                prompts: {},
+                resources: {}
+              },
+              serverInfo: {
+                name: "Feedbuilde Orchestrator",
+                version: "1.0.0"
+              }
+            }
+          });
+        }
+        if (body.method === "notifications/initialized") {
+          return res.status(200).send("OK");
+        }
+        if (body.method === "tools/list") {
+          return res.json({
+            jsonrpc: "2.0",
+            id: body.id,
+            result: { tools: mcpTools }
+          });
+        }
+        if (body.method === "prompts/list") {
+          return res.json({ jsonrpc: "2.0", id: body.id, result: { prompts: [] } });
+        }
+        if (body.method === "resources/list") {
+          return res.json({ jsonrpc: "2.0", id: body.id, result: { resources: [] } });
+        }
+        return res.json({
+          jsonrpc: "2.0",
+          id: body.id,
+          error: { code: -32601, message: "Method not found" }
+        });
+      }
+
       res.json({
         status: "success",
         message: "Command received",
