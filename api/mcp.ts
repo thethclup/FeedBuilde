@@ -12,6 +12,34 @@ export default function handler(req: any, res: any) {
     return res.status(200).end();
   }
 
+  const mcpTools = [
+    { 
+      name: "get_race_status", 
+      description: "Get current race status",
+      inputSchema: { type: "object", properties: {} }
+    },
+    { 
+      name: "start_race", 
+      description: "Start a new race",
+      inputSchema: { type: "object", properties: {} }
+    },
+    { 
+      name: "get_leaderboard", 
+      description: "Get the current leaderboard",
+      inputSchema: { type: "object", properties: {} }
+    },
+    { 
+      name: "optimize_speed", 
+      description: "Optimize racing speed",
+      inputSchema: { type: "object", properties: {} }
+    },
+    { 
+      name: "get_track_info", 
+      description: "Get information about a specific track",
+      inputSchema: { type: "object", properties: {} }
+    }
+  ];
+
   if (req.method === 'GET') {
     return res.status(200).json({
       protocol: "MCP",
@@ -20,13 +48,7 @@ export default function handler(req: any, res: any) {
       status: "active",
       description: "Feedbuilde platformunda çalışan ERC-8004 uyumlu AI Agent.",
       timestamp: new Date().toISOString(),
-      tools: [
-        { name: "get_race_status", description: "Get current race status" },
-        { name: "start_race", description: "Start a new race" },
-        { name: "get_leaderboard", description: "Get the current leaderboard" },
-        { name: "optimize_speed", description: "Optimize racing speed" },
-        { name: "get_track_info", description: "Get information about a specific track" }
-      ],
+      tools: mcpTools,
       prompts: [],
       resources: [],
       capabilities: [
@@ -42,6 +64,43 @@ export default function handler(req: any, res: any) {
 
   if (req.method === 'POST') {
     try {
+      const body = req.body;
+      
+      // Handle MCP JSON-RPC protocol
+      if (body && body.jsonrpc === "2.0" && body.method) {
+        if (body.method === "tools/list") {
+          return res.status(200).json({
+            jsonrpc: "2.0",
+            id: body.id,
+            result: { tools: mcpTools }
+          });
+        }
+        
+        if (body.method === "prompts/list") {
+          return res.status(200).json({
+            jsonrpc: "2.0",
+            id: body.id,
+            result: { prompts: [] }
+          });
+        }
+        
+        if (body.method === "resources/list") {
+          return res.status(200).json({
+            jsonrpc: "2.0",
+            id: body.id,
+            result: { resources: [] }
+          });
+        }
+
+        // Catch-all for other RPC methods
+        return res.status(200).json({
+          jsonrpc: "2.0",
+          id: body.id,
+          error: { code: -32601, message: "Method not found" }
+        });
+      }
+
+      // Legacy fallback
       return res.status(200).json({
         status: "success",
         message: "Command received",
