@@ -6,21 +6,47 @@ import { ContentPalette } from './components/ContentPalette';
 import { UpgradesPanel } from './components/UpgradesPanel';
 import { OnChainPanel } from './components/OnChainPanel';
 import { useGameStore } from './store/gameStore';
-import { useAccount, useSendTransaction } from 'wagmi';
-import { parseEther } from 'viem';
+import { useAccount, useSendTransaction, useSendCalls } from 'wagmi';
+import { parseEther, concat, encodeFunctionData } from 'viem';
 import { Sun } from 'lucide-react';
+
+const BUILDER_SUFFIX = '0x07626173656170700080218021802180218021802180218021';
 
 function MainApp() {
   const { engagementScore, retention } = useGameStore();
   const { isConnected } = useAccount();
   const { sendTransaction } = useSendTransaction();
+  const { sendCalls } = useSendCalls();
 
   const sendGMTransaction = () => {
-    sendTransaction({
-      to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
-      value: parseEther('0'),
-      data: '0x', // or any relevant calldata for say GM
-    });
+    try {
+      if (sendCalls) {
+        sendCalls({
+          calls: [
+            {
+              to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+              value: parseEther('0'),
+              data: '0x',
+            }
+          ],
+          capabilities: {
+            dataSuffix: {
+              value: BUILDER_SUFFIX,
+              optional: true,
+            }
+          }
+        });
+      } else {
+        const attributedCalldata = concat(['0x', BUILDER_SUFFIX]);
+        sendTransaction({
+          to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+          value: parseEther('0'),
+          data: attributedCalldata,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
   
   return (

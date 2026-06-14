@@ -1,14 +1,19 @@
 import React from 'react';
-import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
+import { useAccount, useConnect, useDisconnect, useSignMessage, useSendTransaction, useSendCalls } from 'wagmi';
+import { parseEther, concat } from 'viem';
 import { injected } from 'wagmi/connectors';
 import { SiweMessage } from 'siwe';
 import { useGameStore } from '../store/gameStore';
+
+const BUILDER_SUFFIX = '0x07626173656170700080218021802180218021802180218021';
 
 export function OnChainPanel() {
   const { address, isConnected } = useAccount();
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
   const { signMessageAsync } = useSignMessage();
+  const { sendTransaction } = useSendTransaction();
+  const { sendCalls } = useSendCalls();
   const { engagementScore, prestigeCount, money, revenueRate } = useGameStore();
 
   const handleRecordEmpire = async () => {
@@ -45,19 +50,30 @@ export function OnChainPanel() {
   const handleSayGM = async () => {
     if (!address) return;
     try {
-      const message = new SiweMessage({
-        domain: window.location.host,
-        address,
-        statement: `Say GM on-chain with Feed Builder (Builder Code: bc_kdf087np)`,
-        uri: window.location.origin,
-        version: '1',
-        chainId: 8453,
-      });
-      await signMessageAsync({
-        account: address as `0x${string}`,
-        message: message.prepareMessage(),
-      });
-      alert('GM recorded on-chain! Gggggm ☕️');
+      if (sendCalls) {
+        sendCalls({
+          calls: [
+            {
+              to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+              value: parseEther('0'),
+              data: '0x',
+            }
+          ],
+          capabilities: {
+            dataSuffix: {
+              value: BUILDER_SUFFIX,
+              optional: true,
+            }
+          }
+        });
+      } else {
+        const attributedCalldata = concat(['0x', BUILDER_SUFFIX]);
+        sendTransaction({
+          to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+          value: parseEther('0'),
+          data: attributedCalldata,
+        });
+      }
     } catch(e) {
       console.log(e);
     }
