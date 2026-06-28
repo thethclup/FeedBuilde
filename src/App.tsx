@@ -10,7 +10,8 @@ import { useAccount, useSendTransaction, useSendCalls } from 'wagmi';
 import { parseEther, concat, encodeFunctionData } from 'viem';
 import { Sun } from 'lucide-react';
 
-const BUILDER_SUFFIX = '0x07626173656170700080218021802180218021802180218021';
+const BUILDER_SUFFIX = '0x0762635f6b64663038376e700080218021802180218021802180218021';
+const GM_REGISTRY = '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3';
 
 function MainApp() {
   const { engagementScore, retention } = useGameStore();
@@ -24,7 +25,7 @@ function MainApp() {
         sendCalls({
           calls: [
             {
-              to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+              to: GM_REGISTRY,
               value: parseEther('0'),
               data: '0x',
             }
@@ -39,7 +40,7 @@ function MainApp() {
       } else {
         const attributedCalldata = concat(['0x', BUILDER_SUFFIX]);
         sendTransaction({
-          to: '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3',
+          to: GM_REGISTRY,
           value: parseEther('0'),
           data: attributedCalldata,
         });
