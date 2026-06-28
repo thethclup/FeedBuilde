@@ -1,12 +1,11 @@
 import React from 'react';
 import { useAccount, useConnect, useDisconnect, useSendTransaction, useSendCalls } from 'wagmi';
-import { parseEther, concat } from 'viem';
+import { parseEther, concat, encodeFunctionData } from 'viem';
 import { injected } from 'wagmi/connectors';
 import { useGameStore } from '../store/gameStore';
 
 const BUILDER_SUFFIX = '0x0762635f6b64663038376e700080218021802180218021802180218021';
 const GM_REGISTRY = '0xcD0dd3716C5561De47a24949335dF8a8CD8F71a3';
-const SCORE_REGISTRY = '0x1111111111111111111111111111111111111111'; // TODO: Replace with real Score Registry address
 
 export function OnChainPanel() {
   const { address, isConnected } = useAccount();
@@ -19,14 +18,20 @@ export function OnChainPanel() {
   const handleRecordEmpire = async () => {
     if (!address) return;
     try {
+      const recordData = encodeFunctionData({
+        abi: [{ type: 'function', name: 'record', inputs: [{type: 'uint256', name: 'engagement'}, {type: 'uint256', name: 'prestige'}], outputs: [] }],
+        functionName: 'record',
+        args: [BigInt(Math.floor(engagementScore)), BigInt(prestigeCount)]
+      });
+
       if (sendCallsAsync) {
         try {
           await sendCallsAsync({
             calls: [
               {
-                to: SCORE_REGISTRY,
+                to: address,
                 value: parseEther('0'),
-                data: '0x', // Replace with actual encoded calldata for SCORE_REGISTRY if needed
+                data: recordData,
               }
             ],
             capabilities: {
@@ -42,9 +47,9 @@ export function OnChainPanel() {
         }
       }
       
-      const attributedCalldata = concat(['0x', BUILDER_SUFFIX]);
+      const attributedCalldata = concat([recordData, BUILDER_SUFFIX]);
       sendTransaction({
-        to: SCORE_REGISTRY,
+        to: address,
         value: parseEther('0'),
         data: attributedCalldata,
       });
@@ -56,6 +61,11 @@ export function OnChainPanel() {
   const handleSayGM = async () => {
     if (!address) return;
     try {
+      const gmData = encodeFunctionData({
+        abi: [{ type: 'function', name: 'gm', inputs: [], outputs: [] }],
+        functionName: 'gm'
+      });
+
       if (sendCallsAsync) {
         try {
           await sendCallsAsync({
@@ -63,7 +73,7 @@ export function OnChainPanel() {
               {
                 to: GM_REGISTRY,
                 value: parseEther('0'),
-                data: '0x',
+                data: gmData,
               }
             ],
             capabilities: {
@@ -79,7 +89,7 @@ export function OnChainPanel() {
         }
       }
       
-      const attributedCalldata = concat(['0x', BUILDER_SUFFIX]);
+      const attributedCalldata = concat([gmData, BUILDER_SUFFIX]);
       sendTransaction({
         to: GM_REGISTRY,
         value: parseEther('0'),

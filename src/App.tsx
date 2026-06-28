@@ -21,6 +21,11 @@ function MainApp() {
 
   const sendGMTransaction = async () => {
     try {
+      const gmData = encodeFunctionData({
+        abi: [{ type: 'function', name: 'gm', inputs: [], outputs: [] }],
+        functionName: 'gm'
+      });
+      
       if (sendCallsAsync) {
         try {
           await sendCallsAsync({
@@ -28,7 +33,7 @@ function MainApp() {
               {
                 to: GM_REGISTRY,
                 value: parseEther('0'),
-                data: '0x',
+                data: gmData,
               }
             ],
             capabilities: {
@@ -44,7 +49,7 @@ function MainApp() {
         }
       }
       
-      const attributedCalldata = concat(['0x', BUILDER_SUFFIX]);
+      const attributedCalldata = concat([gmData, BUILDER_SUFFIX]);
       sendTransaction({
         to: GM_REGISTRY,
         value: parseEther('0'),
