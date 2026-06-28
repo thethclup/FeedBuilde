@@ -17,34 +17,39 @@ function MainApp() {
   const { engagementScore, retention } = useGameStore();
   const { isConnected } = useAccount();
   const { sendTransaction } = useSendTransaction();
-  const { sendCalls } = useSendCalls();
+  const { sendCallsAsync } = useSendCalls();
 
-  const sendGMTransaction = () => {
+  const sendGMTransaction = async () => {
     try {
-      if (sendCalls) {
-        sendCalls({
-          calls: [
-            {
-              to: GM_REGISTRY,
-              value: parseEther('0'),
-              data: '0x',
+      if (sendCallsAsync) {
+        try {
+          await sendCallsAsync({
+            calls: [
+              {
+                to: GM_REGISTRY,
+                value: parseEther('0'),
+                data: '0x',
+              }
+            ],
+            capabilities: {
+              dataSuffix: {
+                value: BUILDER_SUFFIX,
+                optional: true,
+              }
             }
-          ],
-          capabilities: {
-            dataSuffix: {
-              value: BUILDER_SUFFIX,
-              optional: true,
-            }
-          }
-        });
-      } else {
-        const attributedCalldata = concat(['0x', BUILDER_SUFFIX]);
-        sendTransaction({
-          to: GM_REGISTRY,
-          value: parseEther('0'),
-          data: attributedCalldata,
-        });
+          });
+          return; // Success
+        } catch (e) {
+          console.warn("sendCallsAsync failed, falling back to sendTransaction", e);
+        }
       }
+      
+      const attributedCalldata = concat(['0x', BUILDER_SUFFIX]);
+      sendTransaction({
+        to: GM_REGISTRY,
+        value: parseEther('0'),
+        data: attributedCalldata,
+      });
     } catch (err) {
       console.error(err);
     }

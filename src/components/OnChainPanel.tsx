@@ -13,36 +13,41 @@ export function OnChainPanel() {
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
   const { sendTransaction } = useSendTransaction();
-  const { sendCalls } = useSendCalls();
+  const { sendCallsAsync } = useSendCalls();
   const { engagementScore, prestigeCount, money, revenueRate } = useGameStore();
 
   const handleRecordEmpire = async () => {
     if (!address) return;
     try {
-      if (sendCalls) {
-        sendCalls({
-          calls: [
-            {
-              to: SCORE_REGISTRY,
-              value: parseEther('0'),
-              data: '0x', // Replace with actual encoded calldata for SCORE_REGISTRY if needed
+      if (sendCallsAsync) {
+        try {
+          await sendCallsAsync({
+            calls: [
+              {
+                to: SCORE_REGISTRY,
+                value: parseEther('0'),
+                data: '0x', // Replace with actual encoded calldata for SCORE_REGISTRY if needed
+              }
+            ],
+            capabilities: {
+              dataSuffix: {
+                value: BUILDER_SUFFIX,
+                optional: true,
+              }
             }
-          ],
-          capabilities: {
-            dataSuffix: {
-              value: BUILDER_SUFFIX,
-              optional: true,
-            }
-          }
-        });
-      } else {
-        const attributedCalldata = concat(['0x', BUILDER_SUFFIX]);
-        sendTransaction({
-          to: SCORE_REGISTRY,
-          value: parseEther('0'),
-          data: attributedCalldata,
-        });
+          });
+          return;
+        } catch (e) {
+           console.warn("sendCallsAsync failed, falling back to sendTransaction", e);
+        }
       }
+      
+      const attributedCalldata = concat(['0x', BUILDER_SUFFIX]);
+      sendTransaction({
+        to: SCORE_REGISTRY,
+        value: parseEther('0'),
+        data: attributedCalldata,
+      });
     } catch (err) {
       console.error(err);
     }
@@ -51,30 +56,35 @@ export function OnChainPanel() {
   const handleSayGM = async () => {
     if (!address) return;
     try {
-      if (sendCalls) {
-        sendCalls({
-          calls: [
-            {
-              to: GM_REGISTRY,
-              value: parseEther('0'),
-              data: '0x',
+      if (sendCallsAsync) {
+        try {
+          await sendCallsAsync({
+            calls: [
+              {
+                to: GM_REGISTRY,
+                value: parseEther('0'),
+                data: '0x',
+              }
+            ],
+            capabilities: {
+              dataSuffix: {
+                value: BUILDER_SUFFIX,
+                optional: true,
+              }
             }
-          ],
-          capabilities: {
-            dataSuffix: {
-              value: BUILDER_SUFFIX,
-              optional: true,
-            }
-          }
-        });
-      } else {
-        const attributedCalldata = concat(['0x', BUILDER_SUFFIX]);
-        sendTransaction({
-          to: GM_REGISTRY,
-          value: parseEther('0'),
-          data: attributedCalldata,
-        });
+          });
+          return;
+        } catch (e) {
+           console.warn("sendCallsAsync failed, falling back to sendTransaction", e);
+        }
       }
+      
+      const attributedCalldata = concat(['0x', BUILDER_SUFFIX]);
+      sendTransaction({
+        to: GM_REGISTRY,
+        value: parseEther('0'),
+        data: attributedCalldata,
+      });
     } catch(e) {
       console.log(e);
     }
